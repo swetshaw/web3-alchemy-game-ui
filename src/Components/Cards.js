@@ -134,6 +134,7 @@ const Cards = (props) => {
               fetch(url.characterURI)
                 .then((res) => res.json())
                 .then((data) => {
+                  data = {...data, tokenId: url.tokenId}
                   return data;
                 })
             )
@@ -204,6 +205,7 @@ const Cards = (props) => {
             >{`${attr.trait_type} : ${attr.value}`}</p>
           </div>
         ))}
+        <p className='font-bold text-lg'>Token Id: {nft.tokenId.toNumber()}</p>
       </div>
     ));
   };
@@ -215,7 +217,7 @@ const Cards = (props) => {
       <h2 className='text-xl font-bold text-amber-400'>
         You own following Characters:
       </h2>
-      <div className='flex gap-4 justify-evenly'>{renderUserNFTS()}</div>
+      <div className='flex flex-wrap gap-4 justify-evenly'>{renderUserNFTS()}</div>
       <button
         type='button'
         className='rounded-md bg-lime-400 p-2 text-2xl font-bold'

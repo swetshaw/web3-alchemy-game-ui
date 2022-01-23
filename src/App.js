@@ -48,8 +48,8 @@ function App() {
   // };
 
   const renderNotConnectedContainer = () => (
-    <button onClick={connectWallet} className='rounded-lg bg-lime-500 p-2'>
-      Connect to Wallet
+    <button onClick={connectWallet} className='font-bold mt-2 rounded-lg bg-lime-500 p-2'>
+      Connect your Wallet
     </button>
   );
   const connectWallet = async () => {
@@ -105,6 +105,7 @@ function App() {
             fetch(url.characterURI)
               .then((res) => res.json())
               .then((data) => {
+                data = {...data, tokenId: url.tokenId}
                 return data;
               })
           )
