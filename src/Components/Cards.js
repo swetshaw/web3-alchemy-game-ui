@@ -6,6 +6,8 @@ import alchemyContract from '../utils/BackUpContract.json';
 const Cards = (props) => {
   const [characters, setCharacters] = useState([]);
   const [gameContract, setGameContract] = useState(null);
+  const [id1, setId1] = useState('');
+  const [id2, setId2] = useState('');
 
   const mintNFT = (_charIdx) => async () => {
     try {
@@ -23,9 +25,11 @@ const Cards = (props) => {
   const combine = async () => {
     if (gameContract) {
       console.log('Combining');
-      const txn = await gameContract.combineNFTs(7, 9);
+      const txn = await gameContract.combineNFTs(id1, id2);
       await txn.wait();
       console.log('combine txn:', txn);
+      setId1('');
+      setId2('');
     }
   };
 
@@ -134,7 +138,7 @@ const Cards = (props) => {
               fetch(url.characterURI)
                 .then((res) => res.json())
                 .then((data) => {
-                  data = {...data, tokenId: url.tokenId}
+                  data = { ...data, tokenId: url.tokenId };
                   return data;
                 })
             )
@@ -210,21 +214,60 @@ const Cards = (props) => {
     ));
   };
 
+  function handleInputOneChange(event) {
+    console.log(event.target.value);
+    setId1(event.target.value);
+  }
+  function handleInputTwoChange(event) {
+    console.log(event.target.value);
+    setId2(event.target.value);
+  }
+
   return (
     <div className='flex flex-col gap-8 mt-8'>
       <h2 className='text-xl font-bold text-amber-400'>Mint your Character</h2>
       <div className='flex gap-4 justify-evenly'>{renderCharacters()}</div>
-      <h2 className='text-xl font-bold text-amber-400'>
+      {props.nfts.length && <><h2 className='text-xl font-bold text-amber-400'>
         You own following Characters:
       </h2>
-      <div className='flex flex-wrap gap-4 justify-evenly'>{renderUserNFTS()}</div>
+      <div className='flex flex-wrap gap-4 justify-evenly'>
+        {renderUserNFTS()}
+      </div>
+      <div>
+        <div>
+          <label className='text-lg font-bold text-amber-400'>
+            First Token Id:
+          </label>
+          <input
+            type='number'
+            placeholder='Enter the token Id of first Character'
+            className='ml-4 rounded'
+            value={id1}
+            onChange={handleInputOneChange}
+          />
+        </div>
+        <div>
+          <label className='text-lg font-bold text-amber-400'>
+            Second Token Id:
+          </label>
+          <input
+            type='number'
+            placeholder='Enter the token Id of second Character'
+            className='rounded ml-4'
+            value={id2}
+            onChange={handleInputTwoChange}
+          />
+        </div>
+      </div>
+
       <button
         type='button'
         className='rounded-md bg-lime-400 p-2 text-2xl font-bold'
         onClick={combine}
       >
         Combine
-      </button>
+      </button></>}
+      
     </div>
   );
 };
